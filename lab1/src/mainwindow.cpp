@@ -85,7 +85,16 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     m_lab3Input2->setPlaceholderText("Введите вторую целочисленную дробь (например, 3/4)...");
     lab3Layout->addWidget(m_lab3Input2);
 
-    QPushButton *lab3Btn = new QPushButton("Представить функциональность класса Fraction", this);
+    m_lab3Operation = new QComboBox(this);
+    m_lab3Operation->setObjectName("l3op");
+    m_lab3Operation->addItem("Сложение (f1 + f2)");
+    m_lab3Operation->addItem("Вычитание (f1 - f2)");
+    m_lab3Operation->addItem("Умножение (f1 * f2)");
+    m_lab3Operation->addItem("Деление (f1 / f2)");
+    m_lab3Operation->addItem("Унарный минус (-f1)");
+    lab3Layout->addWidget(m_lab3Operation);
+
+    QPushButton *lab3Btn = new QPushButton("Вычислить", this);
     lab3Btn->setObjectName("l3b");
     lab3Layout->addWidget(lab3Btn);
 
@@ -121,6 +130,7 @@ MainWindow::~MainWindow()
     delete m_lab2Result;
     delete m_lab3Input1;
     delete m_lab3Input2;
+    delete m_lab3Operation;
     delete m_lab3Result;
 }
 
@@ -151,5 +161,6 @@ void MainWindow::onLab3ButtonClicked()
 {
     QString text1 = m_lab3Input1->text();
     QString text2 = m_lab3Input2->text();
-    m_lab3Result->setText(QString("Результат: %1").arg((Laba10(text1, text2))));
+    int operation = m_lab3Operation->currentIndex();
+    m_lab3Result->setText(QString("Результат: %1").arg(Laba10(text1, text2, operation)));
 }

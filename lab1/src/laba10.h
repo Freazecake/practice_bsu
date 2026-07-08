@@ -7,77 +7,76 @@
 #include <QStringList>
 #include <QTextStream>
 
-QString Laba10(QString input1, QString input2)
+QString Laba10(QString input1, QString input2, int operation)
 {
     QStringList parts1 = input1.split('/');
-    QStringList parts2 = input2.split('/');
-
-    if (parts1.size() != 2 || parts2.size() != 2)
+    if (parts1.size() != 2)
     {
-        return "Ошибка: Введите дроби в формате 'числитель/знаменатель'.";
+        return "Ошибка: Введите первую дробь в формате 'числитель/знаменатель'.";
     }
+
+    bool ok1n = false, ok1d = false;
+    int num1 = parts1[0].toInt(&ok1n);
+    int den1 = parts1[1].toInt(&ok1d);
+    if (!ok1n || !ok1d)
+    {
+        return "Ошибка: Числитель и знаменатель первой дроби должны быть целыми числами.";
+    }
+
+    Fraction f1{num1, den1};
 
     QString result;
     QTextStream out(&result);
 
-    Fraction f1{parts1[0].toInt(), parts1[1].toInt()};
-    Fraction f2{parts2[0].toInt(), parts2[1].toInt()};
+    // Унарный минус — вторая дробь не требуется
+    if (operation == 4)
+    {
+        Fraction f1_copy(f1);
+        out << "-(" << f1 << ") = " << -f1_copy;
+        return result;
+    }
 
-    out << "=== Демонстрация возможностей класса Fraction ===\n\n";
+    QStringList parts2 = input2.split('/');
+    if (parts2.size() != 2)
+    {
+        return "Ошибка: Введите вторую дробь в формате 'числитель/знаменатель'.";
+    }
 
-    out << "1. ВХОДНЫЕ ДРОБИ (из параметров):\n";
-    out << "   Первая дробь (f1): " << f1 << "\n";
-    out << "   Вторая дробь (f2): " << f2 << "\n\n";
+    bool ok2n = false, ok2d = false;
+    int num2 = parts2[0].toInt(&ok2n);
+    int den2 = parts2[1].toInt(&ok2d);
+    if (!ok2n || !ok2d)
+    {
+        return "Ошибка: Числитель и знаменатель второй дроби должны быть целыми числами.";
+    }
 
-    out << "2. КОНСТРУКТОРЫ:\n";
-    Fraction f_default;
-    out << "   По умолчанию: " << f_default << "\n";
-    Fraction f_copy(f1);
-    out << "   Конструктор копирования f_copy(f1): " << f_copy << "\n\n";
+    Fraction f2{num2, den2};
 
-    out << "3. АРИФМЕТИЧЕСКИЕ ОПЕРАЦИИ:\n";
-    Fraction sum = f1 + f2;
-    out << "   f1 + f2 = " << sum << "\n";
-
-    Fraction diff = f1 - f2;
-    out << "   f1 - f2 = " << diff << "\n";
-
-    Fraction prod = f1 * f2;
-    out << "   f1 * f2 = " << prod << "\n";
-
-    Fraction quot = f1 / f2;
-    out << "   f1 / f2 = " << quot << "\n\n";
-
-    out << "4. СОСТАВНЫЕ ОПЕРАТОРЫ ПРИСВАИВАНИЯ:\n";
-    Fraction c = f1;
-    out << "   c = f1 = " << c << "\n";
-    c += f2;
-    out << "   c += f2: " << c << "\n";
-    c -= f2;
-    out << "   c -= f2: " << c << "\n\n";
-
-    out << "5. УНАРНЫЕ ОПЕРАТОРЫ:\n";
-    Fraction g = f1;
-    out << "   g = " << g << "\n";
-    out << "   -g (отрицание): " << -g << "\n";
-
-    Fraction prefix = ++g;
-    out << "   После ++g: g = " << g << ", результат = " << prefix << "\n";
-
-    Fraction postfix_old = g++;
-    out << "   После g++: g = " << g << ", результат (старое значение) = " << postfix_old << "\n\n";
-
-    out << "6. ОПЕРАТОРЫ СРАВНЕНИЯ:\n";
-    out << "   f1 == f2: " << (f1 == f2 ? "true" : "false") << "\n";
-    out << "   f1 != f2: " << (f1 != f2 ? "true" : "false") << "\n";
-    out << "   f1 > f2:  " << (f1 > f2 ? "true" : "false") << "\n";
-    out << "   f1 < f2:  " << (f1 < f2 ? "true" : "false") << "\n\n";
-
-    out << "7. ПРЕОБРАЗОВАНИЕ В DOUBLE:\n";
-    out << "   f1 в double: " << QString::number(fracToDouble(f1), 'f', 6) << "\n";
-    out << "   f2 в double: " << QString::number(fracToDouble(f2), 'f', 6) << "\n\n";
-
-    out << "=== Демонстрация завершена ===";
+    switch (operation)
+    {
+    case 0:
+        out << f1 << " + " << f2 << " = " << (f1 + f2);
+        break;
+    case 1:
+        out << f1 << " - " << f2 << " = " << (f1 - f2);
+        break;
+    case 2:
+        out << f1 << " * " << f2 << " = " << (f1 * f2);
+        break;
+    case 3:
+        if (fracToDouble(f2) == 0.0)
+        {
+            out << "Ошибка: деление на ноль.";
+        }
+        else
+        {
+            out << f1 << " / " << f2 << " = " << (f1 / f2);
+        }
+        break;
+    default:
+        out << "Ошибка: неизвестная операция.";
+        break;
+    }
 
     return result;
 }

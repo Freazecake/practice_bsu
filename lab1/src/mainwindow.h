@@ -29,5 +29,6 @@ private:
 
     QLineEdit *m_lab3Input1;
     QLineEdit *m_lab3Input2;
+    QComboBox *m_lab3Operation;
     QLabel *m_lab3Result;
 };

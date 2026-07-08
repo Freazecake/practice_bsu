@@ -1,4 +1,7 @@
 #include "Fraction.h"
+#include <cstdlib>
+
+unsigned int denomNOD(unsigned int a, unsigned int b);
 
 Fraction::Fraction(int num, int denom) : numerator(num), denominator(denom)
 {
@@ -27,9 +30,27 @@ void Fraction::fractionConversion()
     {
         denominator = 1;
     }
-    if (denominator > abs(numerator))
+
+    // Знаменатель всегда положительный, знак хранится в числителе
+    if (denominator < 0)
     {
-        numerator %= denominator;
+        denominator = -denominator;
+        numerator = -numerator;
+    }
+
+    if (numerator == 0)
+    {
+        denominator = 1;
+        return;
+    }
+
+    // Сокращаем дробь на НОД (2/1 и 4/3 остаются как есть, 4/2 -> 2/1)
+    unsigned int g = denomNOD(static_cast<unsigned int>(std::abs(numerator)),
+                              static_cast<unsigned int>(denominator));
+    if (g > 1)
+    {
+        numerator /= static_cast<int>(g);
+        denominator /= static_cast<int>(g);
     }
 }
 

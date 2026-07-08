@@ -76,10 +76,8 @@ function(add_qt_test TEST_NAME TEST_FILE)
     target_link_libraries(${TEST_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Test)
     target_include_directories(${TEST_NAME} PRIVATE src)
     
-    # 1. Отключаем флаг Windows-приложения для этого теста
     set_target_properties(${TEST_NAME} PROPERTIES WIN32_EXECUTABLE FALSE)
     
-    # 2. ЖЕСТКОЕ РЕШЕНИЕ ДЛЯ MinGW: Явно принуждаем линковщик искать обычный main, а не WinMain
     if(MINGW)
         target_link_options(${TEST_NAME} PRIVATE "-mconsole")
     endif()
@@ -89,4 +87,4 @@ endfunction()
 
 add_qt_test(check_lab1 tests/test_lab1.cpp)
 add_qt_test(check_lab2 tests/test_lab2.cpp)
-# add_qt_test(check_lab3 tests/test_lab3.cpp)
+add_qt_test(check_lab3 tests/test_lab3.cpp)
