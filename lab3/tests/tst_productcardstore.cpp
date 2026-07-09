@@ -18,7 +18,6 @@ void TestProductCardStore::cleanup()
     m_store = nullptr;
 }
 
-// 1. Создание и изменение данных — добавление
 void TestProductCardStore::testAddRecord()
 {
     int countBefore = m_store->count();
@@ -31,7 +30,6 @@ void TestProductCardStore::testAddRecord()
     QCOMPARE(m_store->at(idx).name, QString("Мышь"));
 }
 
-// 1. Создание и изменение данных — редактирование
 void TestProductCardStore::testUpdateRecord()
 {
     ProductCard updated = m_store->at(0);
@@ -46,7 +44,6 @@ void TestProductCardStore::testUpdateRecord()
     QCOMPARE(m_store->at(0).id, 1); // id не должен меняться при редактировании
 }
 
-// 1. Создание и изменение данных — удаление
 void TestProductCardStore::testRemoveRecord()
 {
     int countBefore = m_store->count();
@@ -58,7 +55,6 @@ void TestProductCardStore::testRemoveRecord()
         QVERIFY(m_store->at(i).name != QString("Стол офисный"));
 }
 
-// 2. Сохранение/загрузка — текстовый формат (round-trip)
 void TestProductCardStore::testSaveAndLoadText()
 {
     QTemporaryDir dir;
@@ -78,7 +74,6 @@ void TestProductCardStore::testSaveAndLoadText()
     QCOMPARE(loaded.at(2).receivedDate, m_store->at(2).receivedDate);
 }
 
-// 2. Сохранение/загрузка — бинарный формат (round-trip)
 void TestProductCardStore::testSaveAndLoadBinary()
 {
     QTemporaryDir dir;
@@ -98,7 +93,6 @@ void TestProductCardStore::testSaveAndLoadBinary()
     QCOMPARE(loaded.at(1).receivedDate, m_store->at(1).receivedDate);
 }
 
-// Поиск по нескольким полям
 void TestProductCardStore::testFindByText()
 {
     QVector<int> byName = m_store->findByText("ноутбук");
@@ -113,7 +107,6 @@ void TestProductCardStore::testFindByText()
     QCOMPARE(m_store->at(byId.first()).name, QString("Стол офисный"));
 }
 
-// Сортировка по полю
 void TestProductCardStore::testSortByField()
 {
     m_store->sortBy(ProductCardStore::SortField::Quantity, Qt::AscendingOrder);
@@ -125,7 +118,6 @@ void TestProductCardStore::testSortByField()
     QVERIFY(m_store->at(1).price >= m_store->at(2).price);
 }
 
-// 3. Обработка ошибок — валидация некорректных данных
 void TestProductCardStore::testValidationRejectsInvalidData()
 {
     QString error;
@@ -156,7 +148,6 @@ void TestProductCardStore::testValidationRejectsInvalidData()
     QVERIFY(ProductCardStore::validate(validCard, &error));
 }
 
-// 3. Обработка ошибок — отсутствующий файл
 void TestProductCardStore::testLoadMissingFileFails()
 {
     QString error;
@@ -167,7 +158,6 @@ void TestProductCardStore::testLoadMissingFileFails()
     QVERIFY(!error.isEmpty());
 }
 
-// 3. Обработка ошибок — повреждённый текстовый файл
 void TestProductCardStore::testLoadCorruptedTextFails()
 {
     QTemporaryDir dir;
@@ -186,7 +176,6 @@ void TestProductCardStore::testLoadCorruptedTextFails()
     QVERIFY(!error.isEmpty());
 }
 
-// 3. Обработка ошибок — повреждённый бинарный файл
 void TestProductCardStore::testLoadCorruptedBinaryFails()
 {
     QTemporaryDir dir;

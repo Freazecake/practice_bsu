@@ -6,8 +6,6 @@
 #include <QString>
 #include "shape.h"
 
-// Хранит и обслуживает набор графических объектов (владеет указателями).
-// Не зависит от GUI — тестируется без QApplication.
 class Scene
 {
 public:
@@ -19,26 +17,21 @@ public:
     int count() const { return m_shapes.size(); }
     Shape *at(int index) const;
 
-    void addShape(Shape *shape);          // сцена берёт владение указателем
+    void addShape(Shape *shape);
     bool removeAt(int index);
     void clear();
 
-    // Порядок в векторе = порядок отрисовки (последний элемент — самый верхний слой)
     const QVector<Shape *> &shapes() const { return m_shapes; }
 
-    // Поиск самой верхней фигуры под точкой (для выделения кликом)
     int hitTestTopmost(const QPointF &pos) const;
 
-    // Изменение порядка слоёв
     bool bringToFront(int index);
     bool sendToBack(int index);
-    bool raise(int index);   // на один слой выше
-    bool lower(int index);   // на один слой ниже
+    bool raise(int index);
+    bool lower(int index);
 
-    // Глубокое клонирование всей сцены (используется для undo/redo и copy/paste)
     Scene *cloneAll() const;
 
-    // Сериализация — общий бинарный формат (используется и для файлов, и для undo-снимков)
     QByteArray toByteArray() const;
     bool fromByteArray(const QByteArray &data, QString *errorMessage = nullptr);
 

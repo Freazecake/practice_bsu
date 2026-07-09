@@ -42,7 +42,6 @@ void MainWindow::setupUi()
     auto *central = new QWidget(this);
     auto *mainLayout = new QVBoxLayout(central);
 
-    // --- Панель поиска и фильтрации (дополнительная возможность) ---
     auto *filterBox = new QGroupBox("Поиск и фильтр", central);
     auto *filterLayout = new QHBoxLayout(filterBox);
 
@@ -59,19 +58,17 @@ void MainWindow::setupUi()
     filterLayout->addWidget(new QLabel("Категория:"));
     filterLayout->addWidget(m_categoryFilter);
 
-    // --- Таблица ---
     m_tableView = new QTableView(central);
     m_tableView->setModel(m_proxyModel);
     m_tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
     m_tableView->setSelectionMode(QAbstractItemView::SingleSelection);
-    m_tableView->setSortingEnabled(true);      // сортировка по клику на заголовок
+    m_tableView->setSortingEnabled(true);
     m_tableView->horizontalHeader()->setStretchLastSection(true);
     m_tableView->horizontalHeader()->setSectionResizeMode(WarehouseModel::ColName, QHeaderView::Stretch);
     m_tableView->verticalHeader()->setVisible(false);
     m_tableView->setAlternatingRowColors(true);
     connect(m_tableView, &QTableView::doubleClicked, this, &MainWindow::onEditItem);
 
-    // --- Кнопки управления записями ---
     auto *recordBox = new QGroupBox("Записи", central);
     auto *recordLayout = new QHBoxLayout(recordBox);
     auto *addBtn = new QPushButton("Добавить", recordBox);
@@ -85,7 +82,6 @@ void MainWindow::setupUi()
     recordLayout->addWidget(delBtn);
     recordLayout->addStretch();
 
-    // --- Кнопки сохранения / загрузки ---
     auto *fileBox = new QGroupBox("Файл (2 формата: TXT и CSV)", central);
     auto *fileLayout = new QHBoxLayout(fileBox);
     auto *saveTxtBtn = new QPushButton("Сохранить TXT", fileBox);
@@ -109,24 +105,24 @@ void MainWindow::setupUi()
 
     setCentralWidget(central);
 
-    // --- Статистика в строке состояния (дополнительная возможность) ---
     m_statsLabel = new QLabel(this);
     statusBar()->addPermanentWidget(m_statsLabel);
 
     connect(m_model, &WarehouseModel::dataChanged, this, &MainWindow::updateStatusBar);
     connect(m_model, &WarehouseModel::rowsInserted, this, &MainWindow::updateStatusBar);
     connect(m_model, &WarehouseModel::rowsRemoved, this, &MainWindow::updateStatusBar);
-    connect(m_model, &WarehouseModel::modelReset, this, [this]() {
+    connect(m_model, &WarehouseModel::modelReset, this, [this]()
+            {
         refreshCategoryFilter();
-        updateStatusBar();
-    });
+        updateStatusBar(); });
     connect(m_model, &WarehouseModel::rowsInserted, this, &MainWindow::refreshCategoryFilter);
     connect(m_model, &WarehouseModel::dataChanged, this, &MainWindow::refreshCategoryFilter);
+
+    this->refreshCategoryFilter();
 }
 
 void MainWindow::setupSampleData()
 {
-    // Не менее 10 записей, не менее 5 столбцов (ID, Наименование, Категория, Кол-во, Цена)
     m_model->addItem({1, "Ноутбук", "Электроника", 15, 45000.00});
     m_model->addItem({2, "Мышь компьютерная", "Электроника", 120, 500.00});
     m_model->addItem({3, "Клавиатура", "Электроника", 80, 1200.00});
@@ -213,8 +209,8 @@ void MainWindow::onDeleteItem()
 
     WarehouseItem item = m_model->itemAt(row);
     auto reply = QMessageBox::question(this, "Подтверждение удаления",
-                                        QString("Удалить запись \"%1\"?").arg(item.name),
-                                        QMessageBox::Yes | QMessageBox::No);
+                                       QString("Удалить запись \"%1\"?").arg(item.name),
+                                       QMessageBox::Yes | QMessageBox::No);
     if (reply == QMessageBox::Yes)
         m_model->removeItem(row);
 }
@@ -296,7 +292,6 @@ void MainWindow::onCategoryFilterChanged(int index)
 
 void MainWindow::updateStatusBar()
 {
-    // Статистика / автоматические вычисления (дополнительная возможность)
     QString text = QString("Записей: %1  |  Общее кол-во: %2  |  Общая стоимость: %3 руб.  |  Низкий остаток (≤%4): %5")
                        .arg(m_model->rowCount())
                        .arg(m_model->totalQuantity())

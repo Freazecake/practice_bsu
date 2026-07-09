@@ -42,7 +42,7 @@ bool ProductCardStore::updateRecord(int index, const ProductCard &card)
 {
     if (index < 0 || index >= m_cards.size())
         return false;
-    int id = m_cards[index].id; // id не меняется при редактировании
+    int id = m_cards[index].id;
     m_cards[index] = card;
     m_cards[index].id = id;
     emit recordsChanged();
@@ -92,21 +92,26 @@ static bool isLess(const ProductCard &a, const ProductCard &b, ProductCardStore:
 {
     switch (field)
     {
-    case ProductCardStore::SortField::Id: return a.id < b.id;
-    case ProductCardStore::SortField::Name: return a.name.localeAwareCompare(b.name) < 0;
-    case ProductCardStore::SortField::Category: return a.category.localeAwareCompare(b.category) < 0;
-    case ProductCardStore::SortField::Quantity: return a.quantity < b.quantity;
-    case ProductCardStore::SortField::Price: return a.price < b.price;
-    case ProductCardStore::SortField::ReceivedDate: return a.receivedDate < b.receivedDate;
+    case ProductCardStore::SortField::Id:
+        return a.id < b.id;
+    case ProductCardStore::SortField::Name:
+        return a.name.localeAwareCompare(b.name) < 0;
+    case ProductCardStore::SortField::Category:
+        return a.category.localeAwareCompare(b.category) < 0;
+    case ProductCardStore::SortField::Quantity:
+        return a.quantity < b.quantity;
+    case ProductCardStore::SortField::Price:
+        return a.price < b.price;
+    case ProductCardStore::SortField::ReceivedDate:
+        return a.receivedDate < b.receivedDate;
     }
     return false;
 }
 
 void ProductCardStore::sortBy(SortField field, Qt::SortOrder order)
 {
-    std::sort(m_cards.begin(), m_cards.end(), [field, order](const ProductCard &a, const ProductCard &b) {
-        return order == Qt::AscendingOrder ? isLess(a, b, field) : isLess(b, a, field);
-    });
+    std::sort(m_cards.begin(), m_cards.end(), [field, order](const ProductCard &a, const ProductCard &b)
+              { return order == Qt::AscendingOrder ? isLess(a, b, field) : isLess(b, a, field); });
     emit recordsChanged();
 }
 
@@ -114,27 +119,32 @@ bool ProductCardStore::validate(const ProductCard &card, QString *errorMessage)
 {
     if (card.name.trimmed().isEmpty())
     {
-        if (errorMessage) *errorMessage = "Наименование товара не может быть пустым.";
+        if (errorMessage)
+            *errorMessage = "Наименование товара не может быть пустым.";
         return false;
     }
     if (card.category.trimmed().isEmpty())
     {
-        if (errorMessage) *errorMessage = "Категория не может быть пустой.";
+        if (errorMessage)
+            *errorMessage = "Категория не может быть пустой.";
         return false;
     }
     if (card.quantity < 0 || card.quantity > 1000000)
     {
-        if (errorMessage) *errorMessage = "Количество должно быть в диапазоне от 0 до 1 000 000.";
+        if (errorMessage)
+            *errorMessage = "Количество должно быть в диапазоне от 0 до 1 000 000.";
         return false;
     }
     if (card.price < 0.0 || card.price > 100000000.0)
     {
-        if (errorMessage) *errorMessage = "Цена должна быть в диапазоне от 0 до 100 000 000.";
+        if (errorMessage)
+            *errorMessage = "Цена должна быть в диапазоне от 0 до 100 000 000.";
         return false;
     }
     if (!card.receivedDate.isValid())
     {
-        if (errorMessage) *errorMessage = "Некорректная дата поступления.";
+        if (errorMessage)
+            *errorMessage = "Некорректная дата поступления.";
         return false;
     }
     return true;

@@ -39,7 +39,6 @@ void MainWindow::setupUi()
     auto *central = new QWidget(this);
     auto *mainLayout = new QHBoxLayout(central);
 
-    // --- Левая панель: поиск, сортировка, список записей ---
     auto *leftBox = new QVBoxLayout;
 
     auto *searchLayout = new QHBoxLayout;
@@ -85,7 +84,6 @@ void MainWindow::setupUi()
     leftBox->addWidget(m_listWidget, 1);
     leftBox->addLayout(listButtons);
 
-    // --- Правая панель: форма редактирования карточки ---
     auto *formBox = new QGroupBox("Карточка товара", central);
     auto *form = new QFormLayout(formBox);
 
@@ -140,7 +138,8 @@ void MainWindow::setupMenu()
     editMenu->addAction("Добавить запись", this, &MainWindow::onAddRecord);
     editMenu->addAction("Удалить запись", this, &MainWindow::onDeleteRecord);
     editMenu->addSeparator();
-    editMenu->addAction("Найти...", QKeySequence::Find, this, [this]() { m_searchEdit->setFocus(); m_searchEdit->selectAll(); });
+    editMenu->addAction("Найти...", QKeySequence::Find, this, [this]()
+                        { m_searchEdit->setFocus(); m_searchEdit->selectAll(); });
 
     auto *helpMenu = menuBar()->addMenu("&Справка");
     helpMenu->addAction("О программе", this, &MainWindow::onAbout);
@@ -148,9 +147,9 @@ void MainWindow::setupMenu()
 
 void MainWindow::setupSampleData()
 {
-    m_store->addRecord({m_store->nextId(), "Ноутбук", "Электроника", 15, 45000.00, QDate(2026, 3, 10)});
-    m_store->addRecord({m_store->nextId(), "Стол офисный", "Мебель", 10, 8000.00, QDate(2026, 4, 2)});
-    m_store->addRecord({m_store->nextId(), "Принтер лазерный", "Электроника", 8, 12000.00, QDate(2026, 5, 20)});
+    m_store->addRecord({m_store->nextId(), "Ноутбук", "Электроника", 15, 450.00, QDate(2026, 3, 10)});
+    m_store->addRecord({m_store->nextId(), "Стол офисный", "Мебель", 10, 800.00, QDate(2026, 4, 2)});
+    m_store->addRecord({m_store->nextId(), "Принтер лазерный", "Электроника", 8, 1200.00, QDate(2026, 5, 20)});
 }
 
 void MainWindow::refreshList()
@@ -258,8 +257,8 @@ void MainWindow::onDeleteRecord()
 
     ProductCard card = m_store->at(m_visibleIndices.at(row));
     auto reply = QMessageBox::question(this, "Подтверждение удаления",
-                                        QString("Удалить запись \"%1\"?").arg(card.name),
-                                        QMessageBox::Yes | QMessageBox::No);
+                                       QString("Удалить запись \"%1\"?").arg(card.name),
+                                       QMessageBox::Yes | QMessageBox::No);
     if (reply != QMessageBox::Yes)
         return;
 
@@ -438,10 +437,10 @@ void MainWindow::onSaveBinaryAs()
 void MainWindow::onAbout()
 {
     QMessageBox::about(this, "О программе",
-        "Практическое задание №3 по Qt\n"
-        "SDI-приложение «Карточка товара»\n"
-        "Меню, ввод и редактирование данных, сохранение/загрузка\n"
-        "в текстовом (QTextStream) и бинарном (QDataStream) форматах.");
+                       "Практическое задание №3 по Qt\n"
+                       "SDI-приложение «Карточка товара»\n"
+                       "Меню, ввод и редактирование данных, сохранение/загрузка\n"
+                       "в текстовом (QTextStream) и бинарном (QDataStream) форматах.");
 }
 
 void MainWindow::setDirty(bool dirty)

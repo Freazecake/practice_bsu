@@ -9,7 +9,6 @@
 
 class QPainter;
 
-// Типы фигур (не менее 5 требуется заданием — реализовано 6)
 enum class ShapeType : quint8
 {
     Line = 0,

@@ -5,10 +5,6 @@
 #include <QDate>
 #include <QDataStream>
 
-// Запись "Карточка товара":
-//   2 текстовых поля  - name, category
-//   2 числовых поля   - quantity, price
-//   1 доп. поле       - receivedDate (дата поступления, тип QDate)
 struct ProductCard
 {
     int id = 0;
@@ -21,9 +17,7 @@ struct ProductCard
     double total() const { return quantity * price; }
 };
 
-// Версия бинарного формата — позволяет корректно отличить "не тот формат файла"
-// от повреждённых данных при загрузке.
-constexpr quint32 PRODUCT_CARD_MAGIC = 0x50435330; // "PCS0"
+constexpr quint32 PRODUCT_CARD_MAGIC = 0x50435330;
 constexpr quint16 PRODUCT_CARD_VERSION = 1;
 
 QDataStream &operator<<(QDataStream &out, const ProductCard &card);

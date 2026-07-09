@@ -3,7 +3,6 @@
 
 #include "shape.h"
 
-// Линия: points = [начало, конец]
 class LineShape : public Shape
 {
 public:
@@ -15,7 +14,6 @@ public:
     QVector<QPointF> resizeHandles() const override;
 };
 
-// Прямоугольник: points = [левый верхний угол, правый нижний угол]
 class RectangleShape : public Shape
 {
 public:
@@ -25,10 +23,13 @@ public:
     QRectF boundingRect() const override;
     Shape *clone() const override;
     QVector<QPointF> resizeHandles() const override;
-    int pointIndexForHandle(int handleIndex) const override { Q_UNUSED(handleIndex); return 1; }
+    int pointIndexForHandle(int handleIndex) const override
+    {
+        Q_UNUSED(handleIndex);
+        return 1;
+    }
 };
 
-// Эллипс: points = [левый верхний угол ограничивающего прямоугольника, правый нижний]
 class EllipseShape : public Shape
 {
 public:
@@ -38,10 +39,13 @@ public:
     QRectF boundingRect() const override;
     Shape *clone() const override;
     QVector<QPointF> resizeHandles() const override;
-    int pointIndexForHandle(int handleIndex) const override { Q_UNUSED(handleIndex); return 1; }
+    int pointIndexForHandle(int handleIndex) const override
+    {
+        Q_UNUSED(handleIndex);
+        return 1;
+    }
 };
 
-// Окружность: points = [центр, точка на окружности (задаёт радиус)]
 class CircleShape : public Shape
 {
 public:
@@ -51,12 +55,15 @@ public:
     QRectF boundingRect() const override;
     Shape *clone() const override;
     QVector<QPointF> resizeHandles() const override;
-    int pointIndexForHandle(int handleIndex) const override { Q_UNUSED(handleIndex); return 1; }
+    int pointIndexForHandle(int handleIndex) const override
+    {
+        Q_UNUSED(handleIndex);
+        return 1;
+    }
 
     qreal radius() const;
 };
 
-// Многоугольник: points = вершины (строится последовательными кликами)
 class PolygonShape : public Shape
 {
 public:
@@ -67,7 +74,6 @@ public:
     Shape *clone() const override;
 };
 
-// Свободная кривая: points = последовательность точек, собранных при движении мыши
 class FreehandShape : public Shape
 {
 public:
