@@ -19,9 +19,6 @@ enum class ShapeType : quint8
     Freehand = 5
 };
 
-// Базовый класс графического объекта.
-// Хранит: тип фигуры, координаты (опорные точки), цвет контура, цвет заливки,
-// толщину линии, состояние выделения — как того требует задание.
 class Shape
 {
 public:
@@ -33,9 +30,7 @@ public:
     virtual QRectF boundingRect() const = 0;
     virtual Shape *clone() const = 0;
 
-    // Точки-«ручки» для изменения размера (пусто, если фигура не поддерживает resize)
     virtual QVector<QPointF> resizeHandles() const { return {}; }
-    // Индекс точки, соответствующей ручке handleIndex, для прямого редактирования
     virtual int pointIndexForHandle(int handleIndex) const { return handleIndex; }
 
     virtual void moveBy(const QPointF &delta);
@@ -58,7 +53,6 @@ public:
     const QVector<QPointF> &points() const { return m_points; }
     QVector<QPointF> &points() { return m_points; }
 
-    // Полная сериализация (общие поля + геометрия) — используется и для файлов, и для undo/copy-paste
     void write(QDataStream &out) const;
     static Shape *read(QDataStream &in);
 
@@ -68,12 +62,11 @@ public:
 protected:
     ShapeType m_type;
     QColor m_strokeColor = Qt::black;
-    QColor m_fillColor = QColor(0, 0, 0, 0); // прозрачный = "без заливки"
+    QColor m_fillColor = QColor(0, 0, 0, 0);
     int m_lineWidth = 2;
     bool m_selected = false;
     QVector<QPointF> m_points;
 
-    // Расстояние от точки до отрезка — общая утилита для hitTest в нескольких фигурах
     static qreal distanceToSegment(const QPointF &p, const QPointF &a, const QPointF &b);
 };
 

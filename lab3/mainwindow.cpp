@@ -30,7 +30,7 @@ MainWindow::MainWindow(QWidget *parent)
     refreshList();
     restoreSettings();
 
-    setWindowTitle("Карточка товара — новый файл");
+    setWindowTitle("Лаба 3");
     setDirty(false);
 }
 
@@ -437,10 +437,7 @@ void MainWindow::onSaveBinaryAs()
 void MainWindow::onAbout()
 {
     QMessageBox::about(this, "О программе",
-                       "Практическое задание №3 по Qt\n"
-                       "SDI-приложение «Карточка товара»\n"
-                       "Меню, ввод и редактирование данных, сохранение/загрузка\n"
-                       "в текстовом (QTextStream) и бинарном (QDataStream) форматах.");
+                       "Лаба 3 - «Карточка товара»\n");
 }
 
 void MainWindow::setDirty(bool dirty)

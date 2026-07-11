@@ -33,6 +33,7 @@ MainWindow::MainWindow(QWidget *parent)
     updateWindowTitle();
     resize(1000, 650);
     statusBar()->showMessage("Готово");
+    setWindowTitle("Лаба 4");
 }
 
 void MainWindow::setupToolbar()
@@ -118,8 +119,8 @@ void MainWindow::updateColorButtons()
 {
     m_strokeColorBtn->setStyleSheet(QString("background-color: %1;").arg(m_strokeColor.name()));
     m_fillColorBtn->setStyleSheet(m_fillColor.alpha() == 0
-        ? QString()
-        : QString("background-color: %1;").arg(m_fillColor.name()));
+                                      ? QString()
+                                      : QString("background-color: %1;").arg(m_fillColor.name()));
 }
 
 void MainWindow::onToolChanged(int index)
@@ -291,11 +292,10 @@ void MainWindow::onSaveFileAs()
 void MainWindow::onAbout()
 {
     QMessageBox::about(this, "О программе",
-        "Практическое задание №4 по Qt\n"
-        "Простейший векторный графический редактор\n\n"
-        "Фигуры: линия, прямоугольник, эллипс, окружность, многоугольник, кривая.\n"
-        "Возможности: выделение, перемещение, изменение размера, undo/redo,\n"
-        "копирование/вставка, управление слоями, масштабирование, сохранение/загрузка.");
+                       "Лаба 4\n\n"
+                       "Фигуры: линия, прямоугольник, эллипс, окружность, многоугольник, кривая.\n"
+                       "Возможности: выделение, перемещение, изменение размера, undo/redo,\n"
+                       "копирование/вставка, управление слоями, масштабирование, сохранение/загрузка.");
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
